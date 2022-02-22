@@ -50,14 +50,13 @@ namespace PhoneBook.Controllers
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
             var filter = Builders<Contacts>.Filter.Eq("UUID", contacts.UUID);
 
+            //var jsonData = JsonConvert.SerializeObject(contacts);
+            
+                var updateContact = Builders<Contacts>.Update.Set("Name", contacts.Name)
+                                                           .Set("Surname",contacts.Surname)
+                                                           .Set("Firm",contacts.Firm);
+                dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").UpdateMany(filter, updateContact);
            
-               var updateName = Builders<Contacts>.Update.Set("Name", contacts.Name);
-            //var updateSurname = Builders<Contacts>.Update.Set("Surname", contacts.Surname);
-            var jsonData = JsonConvert.SerializeObject(contacts);
-            dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").UpdateMany(filter, jsonData);
-            //dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").UpdateOne(filter, updateName);
-
-
             return new JsonResult("Updated Successfully");
         }
 
