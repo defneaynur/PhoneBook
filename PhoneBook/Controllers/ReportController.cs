@@ -19,28 +19,46 @@ namespace PhoneBook.Controllers
         {
             _configuration = configuration;
         }
-        //[HttpGet]
-        //public JsonResult Get(string Location)
-        //{
-        //    MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
-        //    //var dbList = dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").AsQueryable();
-        //    var contacts = dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts");
-        //    var contactInformation = dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation");
+        [HttpGet]
+        public JsonResult Get(string Location)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
+            var contacts = dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts");
+            var contactInformation = dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation");
 
-        //    //var result = from c in contacts.AsQueryable()
-        //    //             join i in contactInformation.AsQueryable()
-        //    //             on c.UUID equals i.ContactUUID
-        //    //             into joinedReport                     
-        //    //             select new Report
-        //    //             {
-        //    //                 Location =c.Id ,
-        //    //                 LocationContactCount=c.,
-        //    //                 inventory_docs = joinedInventory
-        //    //             });
-        //    //return new JsonResult(dbList);
-            
+            int phoneCount = (from c in contacts.AsQueryable()
+                              join i in contactInformation.AsQueryable()
+                              on c.UUID equals i.ContactUUID
+                              where i.Location == "İstanbul"
+                              //into joinedContactInformation   
+                              select i.PhoneNumber).Count();
+            int contCount = (from c in contacts.AsQueryable()
+                             join i in contactInformation.AsQueryable()
+                             on c.UUID equals i.ContactUUID 
+                             where i.Location == "İstanbul"
+                             //into joinedContactInformation   
+                             select c.Name).Count();
 
-        //}
-       
+            var reportResult = (from c in contacts.AsQueryable()
+                                join i in contactInformation.AsQueryable()
+                                on c.UUID equals i.ContactUUID
+                                where i.Location == "İstanbul"
+                                select new Report
+                                {
+                                    UUID = c.UUID,
+                                    Status = "Tamamlandı",
+                                    SysTar = DateTime.Now.ToLongDateString(),
+                                    Location = i.Location,
+                                    LocationContactCount = contCount,
+                                    LocationPhoneCount = phoneCount
+
+                                }).AsQueryable();
+
+
+            return new JsonResult(reportResult);
+
+
+        }
+
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PhoneBook.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ContactsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -43,6 +43,7 @@ namespace PhoneBook.Controllers
 
             return new JsonResult("Added Successfully");
         }
+
 
         [HttpPut]
         public JsonResult Put(Contacts contacts)

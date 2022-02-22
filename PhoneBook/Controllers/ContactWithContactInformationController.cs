@@ -33,7 +33,6 @@ namespace PhoneBook.Controllers
                           into joinedContactInformation
                           select new ContactWithContactInformation 
                           {
-
                               UUID = c.UUID,
                               Name = c.Name,
                               Surname = c.Surname,
