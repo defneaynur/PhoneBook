@@ -85,7 +85,7 @@ namespace PhoneBook.Controllers
             var filterInfo = Builders<Contacts>.Filter.Eq("ContactUUID", id);
 
             dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").DeleteOne(filter);
-            dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("ContactInformation").DeleteOne(filterInfo);
+            dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("ContactInformation").DeleteMany(filterInfo);
 
             return new JsonResult("Deleted Successfully");
         }

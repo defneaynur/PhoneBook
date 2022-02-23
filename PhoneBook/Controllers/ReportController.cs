@@ -53,22 +53,6 @@ namespace PhoneBook.Controllers
 
             };
 
-            //var reportResult = (from c in contacts.AsQueryable()
-            //                    join i in contactInformation.AsQueryable()
-            //                    on c.UUID equals i.ContactUUID 
-            //                    where i.Location == "İstanbul"
-            //                    select new Report
-            //                    {
-            //                        UUID = c.UUID,
-            //                        Status = "Tamamlandı",
-            //                        SysTar = DateTime.Now.ToLongDateString(),
-            //                        Location = i.Location,
-            //                        LocationContactCount = contCount,
-            //                        LocationPhoneCount = phoneCount
-
-            //                    }).AsQueryable();
-
-
             return new JsonResult(reportResult);
 
 
