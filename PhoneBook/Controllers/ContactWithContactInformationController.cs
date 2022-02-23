@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PhoneBook.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ContactWithContactInformationController : Controller
     {
         private readonly IConfiguration _configuration;

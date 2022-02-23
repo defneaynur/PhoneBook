@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -20,9 +21,7 @@ namespace TestPhoneBook
             PhoneBook.Controllers.ContactsController contacts = new PhoneBook.Controllers.ContactsController(configuration);
             var actionResult = contacts.Get();
 
-
-            Assert.Equal(HttpStatusCode.OK, actionResult.Value);
-
+            Assert.IsType<JsonResult>(actionResult);
         }
         [Fact]
         public void TestPost()
