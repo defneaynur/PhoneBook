@@ -9,6 +9,7 @@ namespace TestPhoneBook
 {
     public class ContactInformationTest
     {
+
         [Fact]
         public void TestGet()
         {
@@ -78,9 +79,9 @@ namespace TestPhoneBook
         public void TestDelete()
         {
 
-            var c = new PhoneBook.Models.ContactInformation()
+            var info = new PhoneBook.Models.ContactInformation()
             {
-                InfoId = 3
+                InfoId = 4
             };
 
 
@@ -89,7 +90,7 @@ namespace TestPhoneBook
              .AddJsonFile("appsettings.json")
              .Build();
             PhoneBook.Controllers.ContactInformationController information = new PhoneBook.Controllers.ContactInformationController(configuration);
-            var actionResult = information.Delete(c.InfoId);
+            var actionResult = information.Delete(info.InfoId);
 
 
             Assert.Equal("Deleted Successfully", actionResult.Value);
