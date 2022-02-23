@@ -9,7 +9,7 @@ Bu proje, basit bir telefon rehberi işlemleri yapılabilen REST API örneğidir
 * Kişiye ait detaylı bilgilerin içerdiği verileri listeleme işlemleri,
 * Konuma göre kaç kişinin olduğu ve kaç telefon numarası olduğu bilgilerini listeleyen işlemleri gerçekleştirir.
 
-# REST API Request ve Response Bilgileri
+## REST API Request ve Response Bilgileri
 - Contacts Request/Response
 
 `GET /Contacts/`
@@ -71,3 +71,14 @@ Bu proje, basit bir telefon rehberi işlemleri yapılabilen REST API örneğidir
 
     'Accept: application/json' https://localhost:44374/api/Report/İstanbul
      Response: {"UUID":1,"SysTar":"Thursday, February 24, 2022","Status":"Tamamlandı","Location":"İstanbul","LocationContactCount":3,"LocationPhoneCount":3}
+    
+## Kullanılan Teknolojiler 
+ * .Net Core
+ * Git
+ * MongoDB
+ * C#
+ 
+## Gereksinimler
+ * MongoDB Database
+  1. Collection: **Contacts {UUID, Name, Surname, Firm}**
+  2. Collection: **ContactInformation {InfoId, ContactUUID, PhoneNumber, Email, Location}**
