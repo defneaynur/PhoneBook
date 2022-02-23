@@ -1,35 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
 using PhoneBook.Controllers;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace TestPhoneBook
 {
-    public class ContactWithInfoTest
+    public class ReportTest
     {
-        ContactWithContactInformationController contactInfo;
-        public ContactWithInfoTest()
+        ReportController report;
+        public ReportTest()
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
               .SetBasePath(AppContext.BaseDirectory)
               .AddJsonFile("appsettings.json")
               .Build();
-            contactInfo = new ContactWithContactInformationController(configuration);
+            report = new ReportController(configuration);
         }
 
         [Fact]
-        public void TestGetAsync()
+        public void TestGet()
         {
-            var actionResult = contactInfo.Get();
+            var actionResult = report.Get("");
 
             Assert.IsType<JsonResult>(actionResult);
-
         }
     }
 }

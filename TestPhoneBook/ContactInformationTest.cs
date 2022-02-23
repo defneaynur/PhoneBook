@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PhoneBook.Controllers;
+using PhoneBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -10,16 +12,19 @@ namespace TestPhoneBook
 {
     public class ContactInformationTest
     {
-
+        ContactInformationController contactInfo;
+        public ContactInformationTest()
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+              .SetBasePath(AppContext.BaseDirectory)
+              .AddJsonFile("appsettings.json")
+              .Build();
+            contactInfo = new ContactInformationController(configuration);
+        }
         [Fact]
         public void TestGet()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactsController contacts = new PhoneBook.Controllers.ContactsController(configuration);
-            var actionResult = contacts.Get();
+            var actionResult = contactInfo.Get();
 
             Assert.IsType<JsonResult>(actionResult);
         }
@@ -27,32 +32,24 @@ namespace TestPhoneBook
         public void TestPost()
         {
 
-            var info = new PhoneBook.Models.ContactInformation()
+            var info = new ContactInformation()
             {
                 ContactUUID = 4,
                 PhoneNumber = "05553456785",
                 // Email = "",
                 Location = "Ankara"
             };
-           
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactInformationController information = new PhoneBook.Controllers.ContactInformationController(configuration);
-            var actionResult = information.Post(info);
-
+            var actionResult = contactInfo.Post(info);
 
             Assert.Equal("Added Successfully", actionResult.Value);
-
         }
 
         [Fact]
         public void TestPut()
         {
 
-            var info = new PhoneBook.Models.ContactInformation()
+            var info = new ContactInformation()
             {
                 InfoId=1,
                 ContactUUID = 4,
@@ -61,39 +58,22 @@ namespace TestPhoneBook
                 Location = "Ankara"
             };
 
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactInformationController information = new PhoneBook.Controllers.ContactInformationController(configuration);
-            var actionResult = information.Put(info);
-
+            var actionResult = contactInfo.Put(info);
 
             Assert.Equal("Updated Successfully", actionResult.Value);
-
         }
 
         [Fact]
         public void TestDelete()
         {
-
-            var info = new PhoneBook.Models.ContactInformation()
+            var info = new ContactInformation()
             {
                 InfoId = 4
             };
 
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactInformationController information = new PhoneBook.Controllers.ContactInformationController(configuration);
-            var actionResult = information.Delete(info.InfoId);
-
+            var actionResult = contactInfo.Delete(info.InfoId);
 
             Assert.Equal("Deleted Successfully", actionResult.Value);
-
         }
     }
 }

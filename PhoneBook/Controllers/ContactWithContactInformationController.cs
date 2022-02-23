@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using PhoneBook.Models;
+using PhoneBook.Models.Connection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,11 @@ namespace PhoneBook.Controllers
     public class ContactWithContactInformationController : Controller
     {
         private readonly IConfiguration _configuration;
+        DbContext db;
         public ContactWithContactInformationController(IConfiguration configuration)
         {
             _configuration = configuration;
+            db = new DbContext(_configuration);
         }
 
         /// <summary>
@@ -27,15 +30,14 @@ namespace PhoneBook.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
-            var contacts = dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts");
-            var contactInformation = dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation");
+            var contacts = db.DbClient().GetDatabase("MoonLight").GetCollection<Contacts>("Contacts");
+            var contactInformation = db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation");
 
             var result = (from c in contacts.AsQueryable()
                           join i in contactInformation.AsQueryable()
                           on c.UUID equals i.ContactUUID
                           into joinedContactInformation
-                          select new ContactWithContactInformation 
+                          select new ContactWithContactInformation
                           {
                               UUID = c.UUID,
                               Name = c.Name,

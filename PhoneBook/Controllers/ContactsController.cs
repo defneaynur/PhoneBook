@@ -82,8 +82,10 @@ namespace PhoneBook.Controllers
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
             var filter = Builders<Contacts>.Filter.Eq("UUID", id);
+            var filterInfo = Builders<Contacts>.Filter.Eq("ContactUUID", id);
 
             dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").DeleteOne(filter);
+            dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("ContactInformation").DeleteOne(filterInfo);
 
             return new JsonResult("Deleted Successfully");
         }

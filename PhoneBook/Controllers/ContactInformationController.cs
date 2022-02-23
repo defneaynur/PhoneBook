@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using PhoneBook.Models;
+using PhoneBook.Models.Connection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,15 @@ using System.Threading.Tasks;
 namespace PhoneBook.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ContactInformationController : Controller
     {
         private readonly IConfiguration _configuration;
+        DbContext db;
         public ContactInformationController(IConfiguration configuration)
         {
             _configuration = configuration;
+            db = new DbContext(_configuration);
         }
 
         /// <summary>
@@ -27,8 +30,7 @@ namespace PhoneBook.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
-            var dbList = dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").AsQueryable();
+            var dbList = db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").AsQueryable();
 
             return new JsonResult(dbList);
         }
@@ -42,12 +44,10 @@ namespace PhoneBook.Controllers
         [HttpPost]
         public JsonResult Post(ContactInformation ContactInformation)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
-            int lastInfoId = dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").AsQueryable().Count();
+            int lastInfoId = db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").AsQueryable().Count();
             ContactInformation.InfoId = lastInfoId + 1;
 
-            dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").InsertOne(ContactInformation);
-
+            db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").InsertOne(ContactInformation);
 
             return new JsonResult("Added Successfully");
         }
@@ -60,7 +60,6 @@ namespace PhoneBook.Controllers
         [HttpPut]
         public JsonResult Put(ContactInformation ContactInfo)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
             var filter = Builders<ContactInformation>.Filter.Eq("InfoId", ContactInfo.InfoId);
 
             //var jsonData = JsonConvert.SerializeObject(contacts);
@@ -68,7 +67,7 @@ namespace PhoneBook.Controllers
             var updateContactInfo = Builders<ContactInformation>.Update.Set("PhoneNumber", ContactInfo.PhoneNumber)
                                                                         .Set("Email", ContactInfo.Email)
                                                                         .Set("Location", ContactInfo.Location);
-            dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").UpdateOne(filter, updateContactInfo);
+            db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").UpdateOne(filter, updateContactInfo);
 
             return new JsonResult("Updated Successfully");
         }
@@ -81,10 +80,9 @@ namespace PhoneBook.Controllers
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("MoonLightConn"));
-            var filter = Builders<ContactInformation>.Filter.Eq("InfoId", id);
+            var filter = Builders<ContactInformation>.Filter.Eq("ContactUUID", id);
 
-            dbClient.GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").DeleteOne(filter);
+            db.DbClient().GetDatabase("MoonLight").GetCollection<ContactInformation>("ContactInformation").DeleteOne(filter);
 
             return new JsonResult("Deleted Successfully");
         }

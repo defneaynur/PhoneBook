@@ -11,19 +11,26 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using PhoneBook.Controllers;
+using System.Threading.Tasks;
+using PhoneBook.Models;
 
 namespace TestPhoneBook
 {
     public class ContactsTest
     {
+        ContactsController contacts;
+        public ContactsTest()
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+              .SetBasePath(AppContext.BaseDirectory)
+              .AddJsonFile("appsettings.json")
+              .Build();
+            contacts = new ContactsController(configuration);
+        }
+
         [Fact]
         public void TestGet()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactsController contacts = new PhoneBook.Controllers.ContactsController(configuration);
             var actionResult = contacts.Get();
 
             Assert.IsType<JsonResult>(actionResult);
@@ -32,18 +39,13 @@ namespace TestPhoneBook
         [Fact]
         public void TestPost()
         {
-            var c = new PhoneBook.Models.Contacts()
+            var c = new Contacts()
             {
                 Name = "Asaf",
                 Surname = "Ekrem",
                 Firm = "Can Holding"
             };
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactsController contacts = new PhoneBook.Controllers.ContactsController(configuration);
             var actionResult = contacts.Post(c);
 
             Assert.Equal("Added Successfully", actionResult.Value);
@@ -52,7 +54,7 @@ namespace TestPhoneBook
         [Fact]
         public void TestPut()
         {
-            var c = new PhoneBook.Models.Contacts()
+            var c = new Contacts()
             {
                 UUID = 5,
                 Name = "Kemalettin",
@@ -60,11 +62,6 @@ namespace TestPhoneBook
                 Firm = "Kemo Tech"
             };
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            ContactsController contacts = new ContactsController(configuration);
             var actionResult = contacts.Put(c);
 
             Assert.Equal("Updated Successfully", actionResult.Value);
@@ -73,16 +70,11 @@ namespace TestPhoneBook
         [Fact]
         public void TestDelete()
         {
-            var c = new PhoneBook.Models.Contacts()
+            var c = new Contacts()
             {
                 UUID = 5
             };
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-             .AddJsonFile("appsettings.json")
-             .Build();
-            PhoneBook.Controllers.ContactsController contacts = new PhoneBook.Controllers.ContactsController(configuration);
             var actionResult = contacts.Delete(c.UUID);
 
             Assert.Equal("Deleted Successfully", actionResult.Value);
