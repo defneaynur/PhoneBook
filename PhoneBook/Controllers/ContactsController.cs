@@ -21,6 +21,10 @@ namespace PhoneBook.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Contacts tablosunu Listeler
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult Get()
         {
@@ -30,7 +34,11 @@ namespace PhoneBook.Controllers
             return new JsonResult(dbList);
         }
 
-
+        /// <summary>
+        ///  Contacts tablosuna ekleme yapar
+        /// </summary>
+        /// <param name="contacts">Name, Surname, Firm</param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult Post(Contacts contacts)
         {
@@ -40,11 +48,14 @@ namespace PhoneBook.Controllers
 
             dbClient.GetDatabase("MoonLight").GetCollection<Contacts>("Contacts").InsertOne(contacts);
 
-
             return new JsonResult("Added Successfully");
         }
 
-
+        /// <summary>
+        ///  Contacts tablosunu gönderilen değerlere göre günceller
+        /// </summary>
+        /// <param name="contacts">Name, Surname, Firm</param>
+        /// <returns></returns>
         [HttpPut]
         public JsonResult Put(Contacts contacts)
         {
@@ -61,6 +72,11 @@ namespace PhoneBook.Controllers
             return new JsonResult("Updated Successfully");
         }
 
+        /// <summary>
+        /// Contacts tablosundan idye göre silme işlemi gerçekleştirir
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

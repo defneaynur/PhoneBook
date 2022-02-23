@@ -20,6 +20,10 @@ namespace PhoneBook.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Kişi Bilgilerinin detaylarını getirir
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult Get()
         {
@@ -42,8 +46,6 @@ namespace PhoneBook.Controllers
  
 
             return new JsonResult(result);
-
-
         }
     }
 }

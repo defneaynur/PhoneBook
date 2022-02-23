@@ -20,6 +20,10 @@ namespace PhoneBook.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// ContactInformation tablosunu listeler
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult Get()
         {
@@ -30,6 +34,11 @@ namespace PhoneBook.Controllers
         }
 
 
+        /// <summary>
+        /// ContactInformation tablosuna ekleme işlemi yapar
+        /// </summary>
+        /// <param name="ContactInformation">UUID, Phone, Email, Location</param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult Post(ContactInformation ContactInformation)
         {
@@ -43,6 +52,11 @@ namespace PhoneBook.Controllers
             return new JsonResult("Added Successfully");
         }
 
+        /// <summary>
+        /// ContactInformation tablosunu günceller
+        /// </summary>
+        /// <param name="ContactInfo">InfoId, UUID, Phone, Email, Location</param>
+        /// <returns></returns>
         [HttpPut]
         public JsonResult Put(ContactInformation ContactInfo)
         {
@@ -59,6 +73,11 @@ namespace PhoneBook.Controllers
             return new JsonResult("Updated Successfully");
         }
 
+        /// <summary>
+        /// ContactInformation silme işlemi yapar
+        /// </summary>
+        /// <param name="id">InfoId</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

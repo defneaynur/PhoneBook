@@ -26,7 +26,6 @@ namespace TestPhoneBook
             var actionResult = contactInfo.Get();
 
             Assert.IsType<JsonResult>(actionResult);
-            //Assert.Equal(Convert.ToInt32(HttpStatusCode.OK), actionResult.StatusCode);
 
         }
     }
